@@ -1,6 +1,354 @@
-/******* Change Box Model ***************/
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
+/* Mobile-first styles */
+body {
+  font-family: 'Roboto', Arial, sans-serif; /* Professional, readable font */
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  color: #333333; /* Dark gray for readability */
+  background-color: #ffffff; /* White background */
+  position: relative;
+}
+
+header {
+  padding: 8px;
+  text-align: left;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+}
+
+header .header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+header h1 {
+  font-size: 1.5em;
+  margin: 0;
+  font-weight: bold;
+}
+
+nav {
+  background-color: #0a0b0b;
+  padding: 5px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.nav-top-right {
+  text-align: right;
+  padding: 5px 5px;
+  font-size: 1em;
+  position: absolute;
+  top: -6px;
+  right: 10px;
+}
+
+.nav-top-right a {
+  color: #080808;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a {
+  color: #ffffff; 
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bold;
+  display: inline-block;
+  padding: 8px 15px;
+  transition: background-color 0.3s;
+}
+
+nav a:hover {
+  text-decoration: none;
+  color: #126ec5;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav ul li {
+  margin: 0 10px;
+}
+
+.welcome {
+  margin: 10px 0;
+}
+
+.welcome h3 {
+  font-size: 1.2em;
+  margin: 0;
+  color: #0066cc; 
+  font-weight: bold;
+}
+
+.car-showcase {
+  position: relative;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.car-image {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  display: inline-block;
+}
+
+.car-modal {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 10px;
+  border-radius: 5px;
+  width: 40%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+}
+
+.car-modal h4 {
+  font-size: 1.1em;
+  margin: 0 0 5px 0;
+  color: #333333;
+  font-weight: bold;
+}
+
+.car-modal p {
+  font-size: 0.9em;
+  margin: 0;
+  color: #666666;
+}
+
+.cta-image {
+  display: block;
+  margin-top: 10px;
+}
+
+.cta-image img {
+  width: 100%;
+  height: auto;
+  max-height: 50px;
+  border-radius: 5px;
+  transition: opacity 0.3s;
+}
+.cta-image img:hover {
+  opacity: 0.8;
+}
+
+.reviews {
+  padding: 20px 10px;
+  background-color: #f9f9f9;
+  margin: 10px 0;
+}
+
+.reviews h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #0066cc;
+  font-weight: bold;
+}
+
+.reviews ul {
+  list-style: none;
+  padding: 0;
+  font-size: 0.9em;
+  color: #666666;
+  margin: 0 10px;
+  text-align: left;
+}
+
+.reviews li {
+  margin: 5px 0;
+  text-align: left;
+  padding-left: 15px;
+  position: relative;
+}
+
+.reviews li:before {
+  content: "★";
+  color: #0066cc;
+  position: absolute;
+  left: 0;
+  font-size: 0.8em;
+}
+
+.upgrades {
+  padding: 20px 10px;
+  margin: 10px 0;
+  background-color: #f9f9f9;
+}
+
+.upgrades h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #0066cc;
+  font-weight: bold;
+}
+
+.upgrade-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 5px;
+}
+
+.upgrade-item {
+  text-align: center;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2b92f9; 
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 5px;
+}
+
+.modal img {
+  width: 50%;
+  height: auto;
+  max-height: 80px; 
+  display: block;
+}
+
+.upgrade-link {
+  display: block;
+  text-decoration: underline;
+  color: #0066cc;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.upgrade-link:hover {
+  text-decoration: none;
+  color: #004d99;
+}
+
+footer {
+  padding: 10px;
+  text-align: center;
+  background-color: #f4f4f4;
+  margin-top: 10px;
+}
+
+footer p {
+  font-size: 0.8em;
+  margin: 5px 0;
+  color: #666666;
+}
+
+footer a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ===============================
+   Desktop / Large Screen Layout
+   =============================== */
+@media (min-width: 768px) {
+ body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  background-image: url('/images/site/checkerboard.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: 'Roboto', Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+  main {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 1200px;
+    margin: 20px auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+
+  .welcome h3 {
+    font-size: 1.5em;
+    text-align: left;
+  }
+
+  .car-showcase {
+    margin: 20px auto;
+    max-width: 900px;
+  }
+
+  .car-modal {
+    width: 40%;
+    top: 15px;
+    left: 15px;
+  }
+
+  .car-image {
+    height: auto;
+    max-height: 500px;
+    width: 100%;
+  }
+
+  .cta-image img {
+    max-height: 60px;
+  }
+
+  /* Grid layout for Upgrades and Reviews */
+  .upgrades-reviews {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 30px;
+  }
+
+  .upgrades {
+    order: 1;
+    margin: 0;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    border-right: 1px solid #ddd;
+  }
+
+   .reviews {
+    order: 2;
+    margin: 0;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 1px solid #ddd;
+  }
+
+  .upgrade-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .modal img {
+    max-height: 150px;
+  }
+
+  nav ul {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  nav ul li {
+    margin: 0 15px;
+  }
 }

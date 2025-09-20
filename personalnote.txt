@@ -1,0 +1,73 @@
+The Root Files
+Your repo folder constitutes the "root" of your application. There should be five new files at the root: .env, .gitignore, package.json, readme.md, and server.js.
+
+.env
+Any file that begins with a period is typically a "hidden" file, meaning that the operating system will hide it in the finder generated list of files and folders. However, VS Code will show this file as it is meant to be worked with.
+.gitignore
+Like the .env file, the .gitignore file is not visible in the OS provided list of file and folders. This file is specific to GIT. As the name implies, it directs GIT to ignore any folder or file that is listed inside this file.
+package.json
+When building a Node application, this file is critical. It lists all the resources needed for the application to function. It includes scripts and directions for running the application in a local, development environment and can also be modified to include directions for remote, production environments.
+
+Readme.md
+The readme file is not required, but can be helpful. In this case, it contains a brief overview of how to make use of these starter files and folders.
+
+server.js
+This file is the primary operational file for the application. It is the default file that will be read by the Node application. We will work with it extensively in the coming weeks. Note: this file can typically have one of three different names: index.js, app.js, or server.js. You will see all three used. The reason I have choosen for us to use server.js is that I think it adds clarity since it is where we will declare the server operations for our application.
+
+The Folders
+controllers
+We will be using a "Model - View - Controller" (MVC) design pattern for our application. This is the most common pattern for application development and one that you'll want to know and be comfortable with. The controllers folder is where all controller files will be stored.
+--database
+When we build our database and begin to interact with it, we'll want to store the file that allows us to connect to and communicate with the database. This is where that file will be stored. It could be stored elsewhere, but by storing it in a database folder, I hope to add clarity.
+--models
+In the MVC design pattern, a "model" is where data is described and interactions with that data can be stored. In our case, we will build models that will contain the SQL statements and JavaScript functions that will use the SQL statements to actually work with the data in the database. These functions will be responsible for the CRUD (CREATE, READ, UPDATE, DELETE) operations between our application and the database.
+--public
+A Node application is primarily involved with generating dynamic content (content built by the application as it interacts with the database). However, a web application is seldom 100% dynamic. It relies on "static" (non-dynamic) files, e.g. CSS, HTML and client-side JavaScript. The public folder is where these static files will be stored.
+--routes
+A popular holiday song, in the United States, has the lyric "over the river and through the woods to grandmother's house we go". This describes the route or way to get to grandmother's house. A route is a path to be followed to arrive at a destination. Our application will use routes to describe how a particular dynamic interaction is to occur. A URL is a route that describes such an interaction.
+
+In a small application all routes could be written in the main file (server.js). However, as applications grow larger and more complex, the routes for a specific type of interaction are broken out into their own files. These specific route files will be stored here.
+--views
+A view is a dynamically generated page, containing content that the server produces and returns to the browser. The scaffolds that will hold the content are built and stored in the views folder. A view is what appears in the browser - it is how content is "viewed". The view is how the backend process is substantiated, or confirmed, to the client. An interaction between the client and the server, typically begins and ends with a view, except in the case of an API (application programming interface).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Make sure all the files are saved (look for any black dots in the VSC tabs of open files).
+Open a new terminal window, if one is not already open.
+Type pnpm run dev, press "Enter"
+Watch for the message telling you that the server is running on localhost:5500.
+In a browser, open a new tab and type, localhost:5500/, press "Enter".
+You should now be looking at a web page that contains a header, navigation bar, a h1 with your name, and a footer. Also, note the value "Home" in the tab. That is the value passed into the view in the object parameter. You can change its value in the server.js file and save the file. Then reload the page in the browser.
+If everything worked, high five anyone close by. If it didn't go back and check your code, talk to your learning team or get help from the TA or professor.
+When done testing, type Control + C, in the terminal, to stop the server.
