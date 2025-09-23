@@ -32,16 +32,87 @@ A view is a dynamically generated page, containing content that the server produ
 
 
 
+**RALATIONAL database**
+What makes a DB relational, is the relationship it has between tables.
+A primary key is a unique key and cant be repeated on a tables, while a foreign kep can be repeated as much as its needed.
+A composite key is hen 2 or more cols are identified together to make a tables
+A natural key uniqely identifies a single record or a row in a table abd its made up of data
+A natural key uniqely identifies a single record or a row in a table abd its made up of data
+A serogate key uniqely identifies a single record or a row in a table, but they dont have a natural relationshipwith the rest of the columns in the table, they are like auto increment inserted into the table and they are common in numeric number
+
+**PostgreSQL crash course*
+SQL-this stands for Structured query language, it allows us to communicate with our DB and make changes by using a keyword
+Tables: are containers for data with rows and cols.
+Postago: is a tool that allow us to interect using PostgreSQL
+SQL: is made up of series of keyword, that tells PostgreSQL to do something
+Schema: is how a data is layed out
+Sql statement ends in a semicolon, telling it how to do a task
+--in SQL whatever you pit in uppercase is a keyword, but doesnt mean if in lower case wont work!, just always write your keywords in uppercase and ur variables should be lowercase
+--in PostgreSQLyou name tables in singuler form e.g "user" table not "users"
+--if you happen to name a table wit any word that is a keyword, to make it a string wrap it in double " "
+--single quotes are how we tell sql we entering normal texts
+--double quotes are for referencing tables and columns
+--Select keyword: this is used to fetch or display data/info from an existing table or columns E.g SELECT * FROM user
+    the * means to select from all columns E.G if you want to see data from a table called user: SELECT * FROM "user" WHERE age =20;
+    this e.g will display all users on the user table that has age equal to 20
+--UPDATE keyword: this is used to make changes or overide a previous data, always add a specific condition so the sql knows what to update else the whole table will be updated
+e.g UPDATE "user" SET age= 30 WHERE id= 1; note: the specific condition here is= WHERE id= 1; i.e telling sql it is where id is represented as 1 that should be changed t0 30 by age.
+--DELETE keyword: used to delete a data from a table, always add a specific condition so the sql knows what to delete else the whole table will be deleted, e.g DELETE FROM "user" WHERE id=1;
+--SET keyword is used for direction for sql 
+
+*Table relationship*
+We relate table entities to one another through relationship
+-One-one: easiest type of relationship wherea user have one item each
+-one-many: e.g a youtube video having different comments, this is most common used relationship, that is when one entiy have many of another entities
+many-many: more complex, this is relating two separate tables together,through one center table which is called the join table e.g A school that have students, class and teachers
+class is the join table, a student have mltiple teachers and a teacher have multiple students, so relating them together will be through a class (ROOM) 
+Example: in PostgreSQL create table below:
+table1 below
+CREATE TABlE "user"// adding double quotes to user just to specify its a table name not a keywordwe wanna use, this matters only if you happen to be using a word that is a keyword in sql
+(
+    id SERIAL PRIMARY KEY, //id is a column
+    name VARCHAR(100), //name is a column
+    email VARCHAR(225), //email is a col
+    password TEXT, password is a col
+    age INT
+);
+
+=to insert details into table1 we do;
+INSERT INTO "user" (email, name, age, password) 
+VALUES ('troy@fake.email', 'Troy', 25, 'iamtry2025');
+
+=to display details of table1 use the code below
+SELECT * FROM "user" WHERE name ='Troy';
+
+table 2
+CREATE TABlE estg(
+    //remember 'estg' is the name of the table, so continue to add the cols of the table below
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(225),
+    content TEXT,
+    user_id INT,
+    CONSTRAINT fk_user
+        FOREIGN KEY (user_id)
+            REFERENCES "user"(id)
+);
+//then click the button to create the table above... then a new page insert some details to the table
+
+--Inserting two details below
+INSERT INTO estg( name, content, user_id)
+VALUES('Why i love estg', 'OMG i love the school', 1);
+
+INSERT INTO estg( name, content, user_id)
+VALUES('Mr gafar', 'he is the busser of estg', 1);
 
 
+--then if we need to display everything we just inserted to the table we write the function below
+SELECT * FROM estg; - this means SELECT *(everything) FROM estg table
+-this code will display the two info inserted to the table at once, note that we gave it same user_id as 1? this means user1 can have many posts, in other words estg have many users
 
 
-
-
-
-
-
-
+--how to select the estg along with users for this multiple tables, we do this using JOIN keyword
+SELECT * FROM "user" JOIN estg On post.user_id="user".id;
+'''this above means the PostgreSQLshould give the user id along their other details
 
 
 
