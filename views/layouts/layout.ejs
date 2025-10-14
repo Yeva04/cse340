@@ -1,13 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
   <%- include('../partials/head') %>
-  <body>
-    <!-- White centered box -->
-    <main>
+</head>
+<body>
+
+  <div class="container">
+    
       <%- include('../partials/header') %>
-      <%- include('../partials/navigation') %>
+    
+    <nav>
+      <%- include('../partials/navigation', { nav }) %>
+    </nav>
+
+    <main>
       <%- body %>
-      <%- include('../partials/footer') %>
     </main>
-  </body>
+
+    <footer>
+      <%- include('../partials/footer') %>
+    </footer>
+  </div>
+</body>
 </html>

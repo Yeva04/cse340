@@ -72,6 +72,7 @@ nav ul {
   display: flex;
   justify-content: center;
   align-items: center;
+ 
 }
 
 nav ul li {
@@ -272,16 +273,26 @@ footer a:hover {
   font-family: 'Roboto', Arial, sans-serif;
   line-height: 1.6;
   color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+  
+
+  header, nav, footer {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+
+main {
+  padding: 20px;
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
 }
 
-  main {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 1200px;
-    margin: 20px auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  }
 
   .welcome h3 {
     font-size: 1.5em;
@@ -352,3 +363,226 @@ footer a:hover {
     margin: 0 15px;
   }
 }
+
+
+
+/* ===============================
+   New Styles for Inventory Pages
+   =============================== */
+
+/* Inventory Grid Styling */
+#inv-display {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: 1fr; /* Single column on mobile */
+  gap: 15px;
+}
+
+#inv-display li {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#inv-display li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#inv-display a {
+  text-decoration: none;
+  color: #333333;
+}
+
+#inv-display img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.namePrice {
+  padding: 10px;
+  text-align: center;
+}
+
+.namePrice h2 {
+  font-size: 1.2em;
+  margin: 0 0 5px 0;
+  color: #0066cc;
+  font-weight: bold;
+}
+
+.namePrice h2 a {
+  color: #0066cc;
+}
+
+.namePrice h2 a:hover {
+  color: #004d99;
+}
+
+.namePrice span {
+  font-size: 1.1em;
+  color: #666666;
+  font-weight: bold;
+}
+
+.namePrice hr {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 5px 0;
+}
+
+/* Notice for no matching vehicles */
+.notice {
+  font-size: 1em;
+  color: #666666;
+  text-align: center;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+  #inv-display {
+    grid-template-columns: repeat(3, 1fr); /* Three columns on desktop */
+    gap: 20px;
+  }
+
+  #inv-display li {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .namePrice h2 {
+    font-size: 1.3em;
+  }
+
+  .namePrice span {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 480px) {
+  #inv-display {
+    grid-template-columns: 1fr; /* Ensure single column on very small screens */
+  }
+
+  .namePrice h2 {
+    font-size: 1.1em;
+  }
+
+  .namePrice span {
+    font-size: 1em;
+  }
+}
+
+
+/* ===============================
+   Styles for Vehicle Detail View
+   =============================== */
+
+.vehicle-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.detail-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.detail-content {
+  flex: 1;
+  min-width: 0; /* Prevent overflow */
+}
+
+.detail-content h2 {
+  font-size: 1.5em;
+  color: #0066cc;
+  margin-bottom: 10px;
+}
+
+.detail-content p {
+  font-size: 1em;
+  color: #333333;
+  margin: 5px 0;
+}
+
+.detail-content strong {
+  color: #0066cc;
+}
+
+.notice {
+  font-size: 1em;
+  color: #666666;
+  text-align: center;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+  .vehicle-detail {
+    flex-wrap: nowrap;
+  }
+
+  .detail-image {
+    flex: 1;
+    max-width: 50%;
+  }
+
+  .detail-content {
+    flex: 1;
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .vehicle-detail {
+    flex-direction: column;
+  }
+
+  .detail-content h2 {
+    font-size: 1.2em;
+  }
+
+  .detail-content p {
+    font-size: 0.9em;
+  }
+}
+
+.container {
+  background-color: #fff;
+  border-radius: 5px;
+  max-width: 1400px;
+  margin: 20px auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  overflow: hidden;
+  padding: 0 20px;
+}
+
+.container header{
+  padding: 15px 8px;
+}
+
+.container nav,
+.container main,
+.container footer {
+  padding: 15px 20px;
+}
+
+
+

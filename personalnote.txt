@@ -114,26 +114,6 @@ SELECT * FROM estg; - this means SELECT *(everything) FROM estg table
 SELECT * FROM "user" JOIN estg On post.user_id="user".id;
 '''this above means the PostgreSQLshould give the user id along their other details
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Make sure all the files are saved (look for any black dots in the VSC tabs of open files).
 Open a new terminal window, if one is not already open.
 Type pnpm run dev, press "Enter"
@@ -142,3 +122,245 @@ In a browser, open a new tab and type, localhost:5500/, press "Enter".
 You should now be looking at a web page that contains a header, navigation bar, a h1 with your name, and a footer. Also, note the value "Home" in the tab. That is the value passed into the view in the object parameter. You can change its value in the server.js file and save the file. Then reload the page in the browser.
 If everything worked, high five anyone close by. If it didn't go back and check your code, talk to your learning team or get help from the TA or professor.
 When done testing, type Control + C, in the terminal, to stop the server.
+
+--------------------------------------------------------------
+WEEK 3; CONTENT DELIVERY
+--Dynamic Web site model--
+*Static
+Back in the WDD 230 class, when all web pages were built and the content simply typed into them, that is "static". The content is fixed and doesn't change until a human edits the content.
+
+*Dynamic
+When data is stored in a database and a computer language (e.g. JavaScript) is used to extract data from the database and insert it into a web page (hereafter referred to as a view) based on a click or a form submission we have a dynamic site. It is the dynamic model that illustrates how this happens.
+
+*The Client
+The client is generically a human being or a web browser or application on any device that displays the interaction components of a website. Most typically it is a web page (view) where content is displayed and contains links and/or forms that allow the human to click or complete in order to tell the server what we want to do next.
+
+*A View
+A view is a web page (html, css, content, javascript) that appears in the browser or app on the client. It is what the human interacts with and where the content is displayed. The view is always the beginning point of a dynamic interaction and the end point displaying the results of the interaction.
+When a link is clicked or a form submitted from a view, the data is sent to the Web Server using the "Request". The request has two common sub-methods or sub-objects to move information from the client to the server: the GET and the POST. Links and their data are always passed through the GET! Forms and their data are typically passed through the POST. Knowing this is important because you have to know where to look to get the incoming data.
+NOTE: Links and its data pass through GET 
+      Forms and its data pass through POST
+
+*The server is the "backend". The vast majority of what we do this semester happens here. The Node and Express implementation of JavaScript resides ONLY on the server. SQL lives and works ONLY on the server. The database and its management tools exist on a server.
+
+*Web Server
+When a request for a HTML page (e.g. file.html) is made the web server handles it alone. The App and Database servers are usually not involved. This server simply finds the file or resources being "requested" and delivers it to the client.
+
+*App(lication) Server
+When a request for dynamic view (e.g. index.ejs) is made, the web server hands the request to the App server to take care of. The App server processes the JS or other code. If content from the database is needed, it sends a "query" using SQL to the database server. The database server sends the data back as a "Result Set" which the App server has to use to build the content into a view. When the view is ready, the App server sends the view to the web server who in turn sends it back to the client in a "Response".
+
+*Query
+A query is Structured Query Language (SQL) command that the database server understands. It can be a simple or involved. In this class we will use primarily "Data Manipulation" queries intended to Create (INSERT), Read (SELECT), Update or Delete data from the database server. These are referred to as CRUD interactions.
+
+*Response Set
+A response set is returned from the database server when a SELECT query is run. It is the data extracted from the database and meant to be used in building the content in a view. Otherwise, the database server usually supplies a simple "response" indicating the result of an INSERT, UPDATE or DELETE (simply put, an indication that the query worked or not).
+
+*Database Server
+The database server can host many databases, but usually is limited to a particular type of database. On Render.com the database is a PostgreSQL database. The database server understand Structured Query Language (SQL) which is how we ask our questions (queries). The database server typically replies with a result set of data, formatted as an "array" (a collections of multiple values).
+
+==>Node-postgres Prepared statements<==
+PostgreSQL has the concept of a prepared statement. node-postgres supports this by supplying a name parameter to the query config object. If you supply a name parameter the query execution plan will be cached on the PostgreSQL server on a per connection basis. This means if you use two different connections each will have to parse & plan the query once. node-postgres handles this transparently for you: a client only requests a query to be parsed the first time that particular client has seen that query name:
+const query = {
+  // give the query a unique name
+  name: 'fetch-user',
+  text: 'SELECT * FROM user WHERE id = $1',
+  values: [1],
+}
+ 
+const res = await client.query(query)
+console.log(res.rows[0])
+
+--In the above example the first time the client sees a query with the name 'fetch-user' it will send a 'parse' request to the PostgreSQL server & execute the query as normal. The second time, it will skip the 'parse' request and send the name of the query to the PostgreSQL server.
+
+Be careful not to fall into the trap of premature optimization. 
+Most of your queries will likely not benefit much, if at all, from using prepared statements. This is a somewhat "power user" feature of PostgreSQL that is best used when you know how to use it - namely with very complex queries with lots of joins and advanced operations like union and switch statements. I rarely use this feature in my own apps unless writing complex aggregate queries for reports and I know the reports are going to be executed very frequently.
+
+--Row mode
+By default node-postgres reads rows and collects them into JavaScript objects with the keys matching the column names and the values matching the corresponding row value for each column. If you do not need or do not want this behavior you can pass rowMode: 'array' to a query object. This will inform the result parser to bypass collecting rows into a JavaScript object, and instead will return each row as an array of values.
+const query = {
+  text: 'SELECT $1::text as first_name, $2::text as last_name',
+  values: ['Brian', 'Carlson'],
+  rowMode: 'array',
+}
+ 
+const res = await client.query(query)
+console.log(res.fields.map(field => field.name)) // ['first_name', 'last_name']
+console.log(res.rows[0]) // ['Brian', 'Carlson']
+
+--Types
+You can pass in a custom set of type parsers to use when parsing the results of a particular query. The types property must conform to the Types API. Here is an example in which every value is returned as a string:
+
+const query = {
+  text: 'SELECT * from some_table',
+  types: {
+    getTypeParser: () => val => val,
+  },
+}
+
+
+==>JS VARIABLES<==
+Description; JavaScript is a programming language that adds interactivity to websites. You can use it to control just about anything — form data validation, button functionality, game logic, dynamic styling, animation updates, and much more.
+Variables are a fundamental part of any programming language. Learn how to declare and use variables in Javascript. Includes a discussion about weakly typed languages (like Javascript) and what that means.
+
+JavaScript, when used on web pages (though it can also be used in other places), generally works by:
+-Getting references to one or more values such as numbers or to elements on the page.
+-Doing something with those values, such as adding the numbers together.
+-Returning a result that can be used to do something else later on. For example, you might want to display the sum of those numbers on the page.
+
+~API: A set of features that allows a developer to interact with a programming environment. Web APIs (such as the DOM API features we used above) are built on top of the JavaScript language and allow you to manipulate various parts of the browser and the web pages it displays.
+~Events: Things that happen in the browser. They're key to making websites interactive. You can run code in response to events using event handler functions – these are code blocks that run when an event occurs. The most common example is the click event, which is fired by the browser when a user clicks on something.
+~Functions: A way of packaging code that you wish to reuse. You can define your code inside a function once and then run it as many times as you like, which helps you avoid writing the same code over and over. In our example here, we defined a click event handler function, which runs every time a user clicks the image.
+~Conditionals: Code structures used to test if an expression returns true or false and run different code in response to each result. A very common form of conditionals is the if...else statement.
+
+const { Pool } = require("pg")
+require("dotenv").config()
+/* ***************
+ * Connection Pool
+ * SSL Object needed for local testing of app
+ * But will cause problems in production environment
+ * If - else will make determination which to use
+ * *************** */
+let pool
+if (process.env.NODE_ENV == "development") {
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+})
+
+// Added for troubleshooting queries
+// during development
+module.exports = {
+  async query(text, params) {
+    try {
+      const res = await pool.query(text, params)
+      console.log("executed query", { text })
+      return res
+    } catch (error) {
+      console.error("error in query", { text })
+      throw error
+    }
+  },
+}
+} else {
+  pool = new Pool({
+     connectionString: process.env.DATABASE_URL,
+  })
+  module.exports = pool
+}
+
+An Explanation of above code
+Line 1 - imports the "Pool" functionality from the "pg" package. A pool is a collection of connection objects (10 is the default number) that allow multiple site visitors to be interacting with the database at any given time. This keeps you from having to create a separate connection for each interaction.
+Line 2 - imports the "dotenv" package which allows the sensitive information about the database location and connection credentials to be stored in a separate location and still be accessed.
+Line 3-8 - a multi-line comment concerning the "ssl" code found in the connection pool function. This is critical code. Be sure to read and understand the comment..
+Line 9 - creates a local pool variable to hold the functionality of the "Pool" connection.
+Line 10 - an if test to see if the code exists in a developent environment, as declared in the .env file. In the production environment, no value will be found.
+Line 11 - creates a new pool instance from the imported Pool class.
+Line 12 - indicates how the pool will connect to the database (use a connection string) and the value of the string is stored in a name - value pair, which is in the .env file locally, and in an "environment variable" on a remote server. These are equivelent concepts, but different implementations.
+Lines 13 through 15 - describes how the Secure Socket Layer (ssl) is used in the connection to the database, but only in a remote connection, as exists in our development environment.
+Line 16 - ends the pool function started on line 11.
+Line 17 - left blank.
+Lines 18-19 - comments related to the function to be exported in lines 21 through 31.
+Lines 20-31 - exports an asynchronous query function that accepts the text of the query and any parameters. When the query is run it will add the SQL to the console.log. If the query fails, it will console log the SQL text to the console as an error. This code is primarily for troubleshooting as you develop. As you test the application in your development mode, have the terminal open, and you will see the queries logged into the terminal as each is executed.
+Line 32 - ends the if and opens the else structure.
+Line 33 - creates a new "pool" instance from the "Pool" class.
+Line 34 - indicates the value of the connection string will be found in an environment variable. In the production environment, such a variable will not be stored in our .env file, but in the server's settings.
+Line 35 - ends the Pool object and instance creation.
+Line 36 - exports the pool object to be used whenever a database connection is needed. This is for the production environment, which means the queries will not be entered into the console.
+Line 37 - ends the else structure.
+Confirm that the code is typed correctly and the VSC does not report any warnings or errors.
+Save and close the file.
+
+code two below:
+const pool = require("../database/")
+
+/* ***************************
+ *  Get all classification data
+ * ************************** */
+async function getClassifications(){
+  return await pool.query("SELECT * FROM public.classification ORDER BY classification_name")
+}
+
+module.exports = {getClassifications}
+
+An Explanation of above code
+Line 1 - imports the database connection file (named index.js) from the database folder which is one level above the current file. Because the file is index.js, it is the default file, and will be located inside the database folder without being specified. The path could also be ../database/index.js. It would return the same result.
+Line 2 - left intentionally blank.
+Lines 3-5 - a multi-line comment introducing the function.
+Line 6 - creates an "asynchronous" function, named getClassifications. An asynchronous function returns a promise, without blocking (stopping) the execution of the code. It allows the application to continue and will then deal with the results from the promise when delivered.
+Line 7 - will return (send back) the result of the SQL query, which will be sent to the database server using a pool connection, when the resultset (data) or an error, is sent back by the database server. Notice the two keywords: return and await. Await is part of the Async - Await promise structure introduced in ES6. Return is an Express keyword, indicating that the data should be sent to the code location that called the function originally.
+Line 8 - ends the function began on line 6.
+Line 9 - left intentionally blank.
+Line 10 - exports the function for use elsewhere.
+Confirm that the code is typed correctly and the VSC does not report any warnings or errors.
+Save and close the file.
+
+
+code three below used in the invController.js
+const invModel = require("../models/inventory-model")
+const utilities = require("../utilities/")
+
+const invCont = {}
+
+/* ***************************
+ *  Build inventory by classification view
+ * ************************** */
+invCont.buildByClassificationId = async function (req, res, next) {
+  const classification_id = req.params.classificationId
+  const data = await invModel.getInventoryByClassificationId(classification_id)
+  const grid = await utilities.buildClassificationGrid(data)
+  let nav = await utilities.getNav()
+  const className = data[0].classification_name
+  res.render("./inventory/classification", {
+    title: className + " vehicles",
+    nav,
+    grid,
+  })
+}
+
+
+
+
+An Explanation
+Line 1 - brings the inventory-model.js file into scope and stores its functionality into a invModel variable.
+Line 2 - brings the utilities > index.js file into scope and stores its functionality into an utilities variable.
+Line 3 - left intentionally blank.
+Line 4 - creates an empty object in the invCont variable.
+Line 5 - left intentionally blank.
+Lines 6-8 - a multi-line comment.
+Line 9 - creates an asynchronous, anonymous function which accepts the request and response objects, along with the Express next function as parameters. The function is stored into a named method of buildByClassificationId.
+Line 10 - collects the classification_id that has been sent, as a named parameter, through the URL and stores it into the classification_id variable. req is the request object, which the client sends to the server. params is an Express function, used to represent data that is passed in the URL from the client to the server. classificationId is the name that was given to the classification_id value in the inventoryRoute.js file (see line 7 of that file). 
+Line 11 - calls the getInventoryByClassificationId function (you'll build that next), which is in the inventory-model file and passes the classification_id as a parameter. The function "awaits" the data to be returned, and the data is stored in the data variable.
+Line 12 - calls a utility function to build a grid, containing all vehicles within that classification (you'll build this later in this activity). Note that the "data" array is passed in as a parameter. An HTML string, containing a grid, is returned and stored in the grid variable.
+Line 13 - calls the function to build the navigation bar for use in the view and stores it in the nav variable.
+Line 14 - extracts the name of the classification, which matches the classification_id, from the data returned from the database and stores it in the className variable.
+Line 15 - calls the Express render function to return a view to the browser. The view to be returned is named classification, which will be created within an inventory folder, within the already existing views folder.
+Line 16 - build the "title" value to be used in the head partial, but you'll notice that it is dynamic to match the data.
+Line 17 - contains the nav variable, which will display the navigation bar of the view.
+Line 18 - contains the HTML string, containing the - grid - of inventory items.
+Line 19 - ends the "render" function which started on line 11.
+Line 20 - ends the function started on line 9.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

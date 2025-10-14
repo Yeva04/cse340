@@ -1,0 +1,13 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } else { %>
+  <p class="notice">No vehicle details available.</p>
+<% } %>
+
+<% if (errors) { %>
+  <p class="notice"><%= errors.message %></p>
+<% } else if (detailHtml) { %>
+  <div class="vehicle-detail">
+    <%- detailHtml %>
+  </div>
+<% } %>

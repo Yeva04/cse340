@@ -1,47 +1,48 @@
-/* ******************************************
- * This server.js file is the primary file of the 
- * application. It is used to control the project.
- *******************************************/
-/* ***********************
- * Require Statements
- *************************/
-const express = require("express")
-const expressLayouts = require("express-ejs-layouts")
-const env = require("dotenv").config()
-const app = express()
-const static = require("./routes/static")
+const express = require("express");
+const expressLayouts = require("express-ejs-layouts");
+const dotenv = require("dotenv").config();
+const app = express();
 
+const baseController = require("./controllers/baseController");
+const inventoryRoute = require("./routes/inventoryRoute");
+const utilities = require("./utilities/");
 
-/* ***********************
- * View Engine and Templates
- *************************/
-app.set("view engine", "ejs")
-app.use(expressLayouts)
-app.set("layout", "./layouts/layout")// not at views root
+// View engine setup
+app.set("view engine", "ejs");
+app.use(expressLayouts);
+app.set("layout", "./layouts/layout");
 
+// Static files
+app.use(express.static("public", { index: false }));
+app.get("/css/styles.css", (req, res) => {
+  res.sendFile("styles.css", { root: "public/css" });
+});
 
-/* ***********************
- * Routes
- *************************/
-app.use(static)
+// Routes
+app.get("/", baseController.buildHome);
+app.use("/inv", inventoryRoute);
 
-//index route
-app.get("/", function(req, res){
-  res.render("index", {title: "Home"})
-  /* The "res" is the response object, 
-  while "render()" is an Express function that will retrieve the specified view - "index" - to be sent back to the browser.*/
-})
+// 500 error handler
+app.use(async (err, req, res, next) => {
+  console.error(err);
+  const nav = await utilities.getNav();
+  res.status(500).render("errors/error", {
+    title: "Server Error",
+    nav,
+    message: "Something went wrong. Please try again later.",
+  });
+});
 
-/* ***********************
- * Local Server Information
- * Values from .env (environment) file
- *************************/
-const port = process.env.PORT
-const host = process.env.HOST
+// 404 error handler
+app.use(async (req, res) => {
+  const nav = await utilities.getNav();
+  res.status(404).render("errors/404", {
+    title: "Page Not Found",
+    nav,
+  });
+});
 
-/* ***********************
- * Log statement to confirm server operation
- *************************/
-app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`)
-})
+// Server info
+const port = process.env.PORT || 5500;
+const host = process.env.HOST || "localhost";
+app.listen(port, () => console.log(`App listening on ${host}:${port}`));
