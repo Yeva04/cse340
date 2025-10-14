@@ -21,6 +21,11 @@ app.get("/css/styles.css", (req, res) => {
 // Routes
 app.get("/", baseController.buildHome);
 app.use("/inv", inventoryRoute);
+app.use((err, req, res, next) => {
+  console.error("SERVER ERROR:", err)
+  res.status(500).send("Internal Server Error: " + err.message)
+})
+
 
 // 500 error handler
 app.use(async (err, req, res, next) => {
