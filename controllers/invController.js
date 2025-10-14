@@ -57,4 +57,20 @@ invCont.triggerError = function (req, res, next) {
   throw new Error("Intentional 500 Error for Testing");
 };
 
+
+// Deliver management view
+invCont.buildManagement = async function (req, res, next) {
+  try {
+    const messages = req.flash("notice")
+    res.render("inventory/management", {
+      title: "Inventory Management",
+      messages,
+    })
+  } catch (error) {
+    console.error("Management view error:", error)
+    next(error)
+  }
+}
+
+
 module.exports = invCont;
