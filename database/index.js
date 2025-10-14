@@ -1,22 +1,28 @@
 const { Pool } = require("pg")
 require("dotenv").config()
+
 /* ***************
  * Connection Pool
- * SSL Object needed for local testing of app
- * But will cause problems in production environment
- * If - else will make determination which to use
+ * SSL Object for production
+ * Render requires SSL for PostgreSQL connections
  * *************** */
-let pool;
-if (process.env.NODE_ENV == "development") {
+let pool
+
+if (process.env.NODE_ENV === "production") {
+  // ✅ Production: Use SSL (Render)
   pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-})
+    ssl: { rejectUnauthorized: false },
+  })
+} else {
+  // ✅ Development: Use SSL too (optional for pgAdmin DBs)
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+  })
+}
 
 // Added for troubleshooting queries
-// during development
 module.exports = {
   async query(text, params) {
     try {
@@ -24,14 +30,8 @@ module.exports = {
       console.log("executed query", { text })
       return res
     } catch (error) {
-      console.error("error in query", { text })
+      console.error("error in query", { text, error })
       throw error
     }
   },
-}
-} else {
-  pool = new Pool({
-     connectionString: process.env.DATABASE_URL,
-  });
-  module.exports = pool;
 }
