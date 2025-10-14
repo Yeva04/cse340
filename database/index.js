@@ -1,19 +1,22 @@
 const { Pool } = require("pg")
 require("dotenv").config()
 
-/* ***************
- * Connection Pool
- * Works both locally and on Render (with SSL)
- * *************** */
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    require: true,              // Force SSL
-    rejectUnauthorized: false,  // Accept self-signed certs
-  },
-})
+let pool
 
-// Added for troubleshooting queries
+try {
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl:
+      process.env.NODE_ENV === "production"
+        ? { rejectUnauthorized: false } // Render environment
+        : false,                        // Local environment
+  })
+  console.log("✅ Database pool created successfully")
+} catch (err) {
+  console.error("❌ Error creating database pool", err)
+}
+
+// For querying
 module.exports = {
   async query(text, params) {
     try {
