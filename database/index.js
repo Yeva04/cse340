@@ -3,24 +3,15 @@ require("dotenv").config()
 
 /* ***************
  * Connection Pool
- * SSL Object for production
- * Render requires SSL for PostgreSQL connections
+ * Works both locally and on Render (with SSL)
  * *************** */
-let pool
-
-if (process.env.NODE_ENV === "production") {
-  // ✅ Production: Use SSL (Render)
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
-  })
-} else {
-  // ✅ Development: Use SSL too (optional for pgAdmin DBs)
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
-  })
-}
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    require: true,              // Force SSL
+    rejectUnauthorized: false,  // Accept self-signed certs
+  },
+})
 
 // Added for troubleshooting queries
 module.exports = {
