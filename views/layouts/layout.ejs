@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/forms.css">
 </head>
 <body>
 
@@ -12,6 +13,18 @@
     <nav>
       <%- include('../partials/navigation', { nav }) %>
     </nav>
+
+    <% if (success_msg && success_msg.length > 0) { %>
+  <div class="flash-message success">
+    <%= success_msg %>
+  </div>
+<% } %>
+
+<% if (error_msg && error_msg.length > 0) { %>
+  <div class="flash-message error">
+    <%= error_msg %>
+  </div>
+<% } %>
 
     <main>
       <%- body %>

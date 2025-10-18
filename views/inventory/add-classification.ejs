@@ -1,0 +1,18 @@
+<main class="form-container">
+  <h1>Add New Classification</h1>
+<% if (errors && errors.length > 0) { %>
+  <div class="error-messages">
+    <% errors.forEach(err => { %>
+      <p><%= err %></p>
+    <% }) %>
+  </div>
+<% } %>
+
+  <form class="inventory-form" action="/inv/add-classification" method="POST">
+    <label for="classification_name">Classification Name:</label>
+    <input type="text" id="classification_name" name="classification_name" required>
+
+    <button type="submit" class="btn">Add Classification</button>
+  </form>
+</main>
+

@@ -1,13 +1,15 @@
-<% if (title) { %>
-  <h1><%= title %></h1>
-<% } else { %>
-  <p class="notice">No vehicle details available.</p>
-<% } %>
-
-<% if (errors) { %>
-  <p class="notice"><%= errors.message %></p>
-<% } else if (detailHtml) { %>
-  <div class="vehicle-detail">
-    <%- detailHtml %>
-  </div>
-<% } %>
+<main class="vehicle-detail">
+  <% if (data) { %>
+    <h1><%= data.inv_make %> <%= data.inv_model %></h1>
+    <img src="<%= data.inv_image %>" alt="<%= data.inv_make %> <%= data.inv_model %>">
+    <ul>
+      <li>Price: $<%= data.inv_price.toLocaleString() %></li>
+      <li>Year: <%= data.inv_year %></li>
+      <li>Color: <%= data.inv_color %></li>
+      <li>Mileage: <%= data.inv_miles.toLocaleString() %></li>
+      <li>Description: <%= data.inv_description %></li>
+    </ul>
+  <% } else { %>
+    <p>No vehicle details available.</p>
+  <% } %>
+</main>

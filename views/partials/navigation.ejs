@@ -1,16 +1,3 @@
-<ul>
-  <li><a href="/" title="Home page">Home</a></li>
-  <% if (Array.isArray(nav)) { %>
-    <% nav.forEach(item => { %>
-      <li>
-        <a href="/inv/type/<%= item.classification_id %>" 
-           title="See our inventory of <%= item.classification_name %> vehicles">
-          <%= item.classification_name %>
-        </a>
-      </li>
-    <% }) %>
-  <% } else { %>
-    <li>No classifications available</li>
-  <% } %>
- <!-- <li><a href="/account" style="float: right;">My Account</a></li>-->
-</ul>
+<nav>
+  <%- nav %>
+</nav>
